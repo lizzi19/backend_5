@@ -1,0 +1,29 @@
+// Basic MongoDB queries for restaurants collection
+
+// Query 1: Restaurants in the borough Bronx
+db.restaurants.find({ "borough": "Bronx" })
+
+// Query 2: First 5 restaurants in the borough Bronx
+db.restaurants.find({ "borough": "Bronx" }).limit(5)
+
+// Query 3: Next 5 restaurants in the borough Bronx after skipping the first 5
+db.restaurants.find({ "borough": "Bronx" }).skip(5).limit(5)
+
+// Query 4: Restaurants with a score greater than 80 but less than 100
+db.restaurants.find({ "grades.score": { $gt: 80, $lt: 100 } })
+
+// Query 5: Restaurants not preparing 'American' cuisine, with a score > 70 and longitude < -65.754168
+db.restaurants.find({
+    "cuisine": { $ne: "American" },
+    "grades.score": { $gt: 70 },
+    "address.coord.0": { $lt: -65.754168 }
+})
+
+// Query 6: Restaurants with grades having a score of 2 and a score of 6, located in Manhattan or Brooklyn
+db.restaurants.find({
+    $and: [
+        { "grades": { $elemMatch: { "score": 2 } } },
+        { "grades": { $elemMatch: { "score": 6 } } },
+        { "borough": { $in: ["Manhattan", "Brooklyn"] } }
+    ]
+})
